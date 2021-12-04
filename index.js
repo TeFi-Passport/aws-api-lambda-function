@@ -102,11 +102,13 @@ const addPassport = async (requestJSON) => {
         address : requestJSON.address,
         score: requestJSON.score,
         deliveryDate: now,
-        lastUpdated: now
+        lastUpdated: now,
+        transactionID: requestJSON.transactionID,
+        block : requestJSON.block,
+        network: requestJSON.network,
     }
 
-    if (requestJSON.transactionID)
-        params.transactionID = requestJSON.transactionID;
+    // todo: network has to be a primary key too since an address can have a passport on mainnet & testnet
 
     await dynamo
         .put({
@@ -127,9 +129,6 @@ const addPassport = async (requestJSON) => {
  * @returns {Promise<{}>} - the updated passport
  */
 const updatePassport = async (requestJSON, passport) => {
-    if (!requestJSON.transactionID)
-        throw new Error('Updating a passport requires providing the transaction ID of the associated transaction');
-
     const now = Date.now();
 
     let params = {
@@ -137,7 +136,9 @@ const updatePassport = async (requestJSON, passport) => {
         address : requestJSON.address,
         score: requestJSON.score,
         lastUpdated: now,
-        transactionID: requestJSON.transactionID
+        transactionID: requestJSON.transactionID,
+        block : requestJSON.block,
+        network: requestJSON.network,
     }
 
     await dynamo
@@ -165,4 +166,13 @@ const checkRequestJSON = (requestJSON) => {
 
     if (requestJSON.score < 0 || requestJSON.score > 1000)
         throw new Error('The score needs to be between 0 and 1000');
+
+    if (!requestJSON.transactionID)
+        throw new Error('Creating or updating a passport requires providing the transaction ID of the associated transaction');
+
+    if (!requestJSON.network)
+        throw new Error('Creating or updating a passport requires providing the network of the passport');
+
+    if (!requestJSON.block)
+        throw new Error('Creating or updating a passport requires providing the block in which the tx was added');
 }
