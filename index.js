@@ -96,6 +96,9 @@ const passportExists = (passport) => {
  */
 const addPassport = async (requestJSON) => {
 
+    if (!requestJSON.imageLink)
+        throw new Error('You need to provide a valid image link');
+
     const now = Date.now();
 
     let params = {
@@ -106,6 +109,8 @@ const addPassport = async (requestJSON) => {
         transactionID: requestJSON.transactionID,
         block : requestJSON.block,
         network: requestJSON.network,
+        scoreDetail: requestJSON.scoreDetail,
+        imageLink: requestJSON.imageLink
     }
 
     // todo: network has to be a primary key too since an address can have a passport on mainnet & testnet
@@ -139,6 +144,7 @@ const updatePassport = async (requestJSON, passport) => {
         transactionID: requestJSON.transactionID,
         block : requestJSON.block,
         network: requestJSON.network,
+        scoreDetail: requestJSON.scoreDetail,
     }
 
     await dynamo
@@ -175,4 +181,7 @@ const checkRequestJSON = (requestJSON) => {
 
     if (!requestJSON.block)
         throw new Error('Creating or updating a passport requires providing the block in which the tx was added');
+
+    if (!requestJSON.scoreDetail)
+        throw new Error('Creating or updating a passport requires providing the score detail');
 }
