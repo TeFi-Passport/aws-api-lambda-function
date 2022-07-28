@@ -1,0 +1,24 @@
+{
+  "name": "aws-api-lambda-function",
+  "version": "1.0.0",
+  "description": "Contains the code that handles all the api requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeFi-Passport/aws-api-lambda-function.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TeFi-Passport/aws-api-lambda-function/issues"
+  },
+  "homepage": "https://github.com/TeFi-Passport/aws-api-lambda-function#readme",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^5.2.0",
+    "node-fetch": "^3.1.0"
+  }
+}
